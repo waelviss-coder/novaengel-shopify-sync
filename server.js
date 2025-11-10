@@ -1,13 +1,20 @@
-require('dotenv').config();
 const express = require('express');
 const syncRoute = require('./routes/sync');
 
 const app = express();
-app.use(express.json());
+const PORT = process.env.PORT || 10000;
 
-app.get('/', (req, res) => res.send('NovaEngel Shopify Sync App'));
+// Route principale
+app.get('/', (req, res) => {
+    res.send('NovaEngel Shopify Sync App');
+});
 
-app.post('/api/sync', syncRoute);
+// Route pour synchroniser le stock
+app.get('/sync', async (req, res) => {
+    await syncRoute(req, res);
+});
 
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
+// Démarrage du serveur
+app.listen(PORT, () => {
+    console.log(`Server running on port ${PORT}`);
+});
